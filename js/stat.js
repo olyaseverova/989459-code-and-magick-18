@@ -20,6 +20,28 @@ var renderCloud = function (ctx, x, y, color) {
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
 };
 
+var maxArray = function (arr) {
+  var max = 0;
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] > max) {
+      max = arr[i];
+    }
+  }
+  return max;
+};
+
+var randomInteger = function (uBound) {
+  return Math.round(Math.random() * uBound);
+};
+
+var lineBreakToScreen = function (ctx, text, x, y, yGap) {
+  var arr = text.split('\n');
+
+  for (var j = 0; j < arr.length; j++) {
+    ctx.fillText(arr[j], x, y + yGap * j);
+  }
+};
+
 window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, 'rgba(0, 0, 0, 0.7)');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
@@ -27,19 +49,11 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.fillStyle = '#000';
 
   ctx.font = '16px PT Mono';
-  ctx.fillText('Ура вы победили!', CLOUD_X + HEADLINE_GAP, HEADLINE_GAP * 2);
-  ctx.fillText('Список результатов:', CLOUD_X + HEADLINE_GAP, HEADLINE_GAP * 3);
-
-  var maxTime = 0; // Вычисляем максимальное время
-  for (var i = 0; i < times.length; i++) {
-    if (times[i] > maxTime) {
-      maxTime = times[i];
-    }
-  }
+  lineBreakToScreen(ctx, 'Ура вы победили!\nСписок результатов:', CLOUD_X + HEADLINE_GAP, HEADLINE_GAP * 2, HEADLINE_GAP);
 
   for (var j = 0; j < names.length; j++) {
     var gapX = CLOUD_X + RESULTS_X + (RESULTS_GAP + RESULTS_WIDTH) * j;
-    var rectHeight = RESULTS_MAX * times[j] / maxTime;
+    var rectHeight = RESULTS_MAX * times[j] / maxArray(times);
     var gapYRect = RESULTS_HEIGHT - rectHeight;
 
     ctx.fillStyle = '#000';
@@ -48,7 +62,7 @@ window.renderStatistics = function (ctx, names, times) {
     if (names[j] === 'Вы') {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
     } else {
-      ctx.fillStyle = 'hsl(240, ' + Math.round(Math.random() * 100) + '%, 50%)';
+      ctx.fillStyle = 'hsl(240, ' + randomInteger(100) + '%, 50%)';
     }
     ctx.fillRect(gapX, gapYRect, RESULTS_WIDTH, rectHeight);
   }

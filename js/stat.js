@@ -30,11 +30,11 @@ var findMaxInArray = function (arr) {
   return max;
 };
 
-var randomInteger = function (uBound) {
+var getRandomInteger = function (uBound) {
   return Math.round(Math.random() * uBound);
 };
 
-var lineBreakToScreen = function (ctx, text, x, y, yGap) {
+var breakScreenLine = function (ctx, text, x, y, yGap) {
   var arr = text.split('\n');
 
   for (var j = 0; j < arr.length; j++) {
@@ -42,8 +42,8 @@ var lineBreakToScreen = function (ctx, text, x, y, yGap) {
   }
 };
 
-var randomFillstyle = function () {
-  return 'hsl(240, ' + randomInteger(100) + '%, 50%)';
+var getRandomFillstyle = function () {
+  return 'hsl(240, ' + getRandomInteger(100) + '%, 50%)';
 };
 
 window.renderStatistics = function (ctx, names, times) {
@@ -53,7 +53,7 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.fillStyle = '#000';
 
   ctx.font = '16px PT Mono';
-  lineBreakToScreen(ctx, 'Ура вы победили!\nСписок результатов:', CLOUD_X + HEADLINE_GAP, HEADLINE_GAP * 2, HEADLINE_GAP);
+  breakScreenLine(ctx, 'Ура вы победили!\nСписок результатов:', CLOUD_X + HEADLINE_GAP, HEADLINE_GAP * 2, HEADLINE_GAP);
 
   for (var j = 0; j < names.length; j++) {
     var gapX = CLOUD_X + RESULTS_X + (RESULTS_GAP + RESULTS_WIDTH) * j;
@@ -66,7 +66,7 @@ window.renderStatistics = function (ctx, names, times) {
     if (names[j] === 'Вы') {
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
     } else {
-      ctx.fillStyle = randomFillstyle();
+      ctx.fillStyle = getRandomFillstyle();
     }
     ctx.fillRect(gapX, gapYRect, RESULTS_WIDTH, rectHeight);
   }

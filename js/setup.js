@@ -44,10 +44,12 @@ document.querySelector('.setup-similar').classList.remove('hidden');
 
 var setup = document.querySelector('.setup');
 var setupOpen = document.querySelector('.setup-open');
-var setupOpenIcon = setupOpen.querySelector('.setup-open-icon');
 var setupClose = setup.querySelector('.setup-close');
 
 var onPopupEscPress = function (evt) {
+  if (evt.target.className === 'setup-user-name') {
+    return;
+  }
   if (evt.keyCode === ESC_KEYCODE) {
     closePopup();
   }
@@ -65,14 +67,6 @@ var closePopup = function () {
 
 setupOpen.addEventListener('click', function () {
   openPopup();
-});
-
-setupOpenIcon.addEventListener('mouseover', function (evt) {
-  setupOpenIcon.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      openPopup();
-    }
-  });
 });
 
 setupOpen.addEventListener('keydown', function (evt) {
@@ -93,7 +87,7 @@ setupClose.addEventListener('keydown', function (evt) {
 
 var userNameInput = setup.querySelector('.setup-user-name');
 
-userNameInput.addEventListener('invalid', function (evt) {
+userNameInput.addEventListener('invalid', function () {
   if (userNameInput.validity.tooShort) {
     userNameInput.setCustomValidity('Имя должно состоять минимум из 2-х символов');
   } else if (userNameInput.validity.tooLong) {

@@ -11,8 +11,8 @@ var COAT_COLORS = ['rgb(101,137,164)', 'rgb(241,43,107)', 'rgb(146,100,161)', 'r
 var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
-var similarListElement = document.querySelector('.setup-similar-list');
-var similarWizardTemplate = document.querySelector('#similar-wizard-template')
+var similarElement = document.querySelector('.setup-similar-list');
+var wizardTemplateElement = document.querySelector('#similar-wizard-template')
   .content
   .querySelector('.setup-similar-item');
 
@@ -21,7 +21,7 @@ var getRandomArrayItem = function (arr) {
 };
 
 var renderPersonage = function (wizard) {
-  var personageElement = similarWizardTemplate.cloneNode(true);
+  var personageElement = wizardTemplateElement.cloneNode(true);
 
   personageElement.querySelector('.setup-similar-label').textContent = wizard.name;
   personageElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
@@ -38,16 +38,16 @@ for (var k = 0; k < PERSONAGES_QUANTITY; k++) {
     eyesColor: getRandomArrayItem(EYES_COLORS)
   }));
 }
-similarListElement.appendChild(fragment);
+similarElement.appendChild(fragment);
 
 document.querySelector('.setup-similar').classList.remove('hidden');
 
-var setup = document.querySelector('.setup');
-var setupOpen = document.querySelector('.setup-open');
-var setupClose = setup.querySelector('.setup-close');
+var setupElement = document.querySelector('.setup');
+var setupOpenElement = document.querySelector('.setup-open');
+var setupCloseElement = setupElement.querySelector('.setup-close');
 
 var onPopupEscPress = function (evt) {
-  if (evt.target.className === 'setup-user-name') {
+  if (evt.classList.contains === 'setup-user-name') {
     return;
   }
   if (evt.keyCode === ESC_KEYCODE) {
@@ -56,55 +56,49 @@ var onPopupEscPress = function (evt) {
 };
 
 var openPopup = function () {
-  setup.classList.remove('hidden');
+  setupElement.classList.remove('hidden');
   document.addEventListener('keydown', onPopupEscPress);
 };
 
 var closePopup = function () {
-  setup.classList.add('hidden');
+  setupElement.classList.add('hidden');
   document.removeEventListener('keydown', onPopupEscPress);
 };
 
-setupOpen.addEventListener('click', function () {
+setupOpenElement.addEventListener('click', function () {
   openPopup();
 });
 
-setupOpen.addEventListener('keydown', function (evt) {
+setupOpenElement.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openPopup();
   }
 });
 
-setupClose.addEventListener('click', function () {
+setupCloseElement.addEventListener('click', function () {
   closePopup();
 });
 
-setupClose.addEventListener('keydown', function (evt) {
+setupCloseElement.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     closePopup();
   }
 });
 
-var userNameInput = setup.querySelector('.setup-user-name');
+var nameInputElement = setupElement.querySelector('.setup-user-name');
 
-userNameInput.addEventListener('invalid', function () {
-  if (userNameInput.validity.tooShort) {
-    userNameInput.setCustomValidity('Имя должно состоять минимум из 2-х символов');
-  } else if (userNameInput.validity.tooLong) {
-    userNameInput.setCustomValidity('Имя не должно превышать 25-ти символов');
-  } else if (userNameInput.validity.valueMissing) {
-    userNameInput.setCustomValidity('Обязательное поле');
-  } else {
-    userNameInput.setCustomValidity('');
+nameInputElement.addEventListener('invalid', function (evt) {
+  if (evt.classList.contains !== 'setup-wizard-form') {
+    return;
   }
-});
-
-userNameInput.addEventListener('input', function (evt) {
-  var target = evt.target;
-  if (target.value.length < 2) {
-    target.setCustomValidity('Имя должно состоять минимум из 2-х символов');
+  if (nameInputElement.validity.tooShort) {
+    nameInputElement.setCustomValidity('Имя должно состоять минимум из 2-х символов');
+  } else if (nameInputElement.validity.tooLong) {
+    nameInputElement.setCustomValidity('Имя не должно превышать 25-ти символов');
+  } else if (nameInputElement.validity.valueMissing) {
+    nameInputElement.setCustomValidity('Обязательное поле');
   } else {
-    target.setCustomValidity('');
+    nameInputElement.setCustomValidity('');
   }
 });
 

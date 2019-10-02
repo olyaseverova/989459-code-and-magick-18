@@ -47,7 +47,7 @@ var setupOpenElement = document.querySelector('.setup-open');
 var setupCloseElement = setupElement.querySelector('.setup-close');
 
 var onPopupEscPress = function (evt) {
-  if (evt.classList.contains === 'setup-user-name') {
+  if (evt.target.classList === 'setup-user-name') {
     return;
   }
   if (evt.keyCode === ESC_KEYCODE) {
@@ -88,7 +88,7 @@ setupCloseElement.addEventListener('keydown', function (evt) {
 var nameInputElement = setupElement.querySelector('.setup-user-name');
 
 nameInputElement.addEventListener('invalid', function (evt) {
-  if (evt.classList.contains !== 'setup-wizard-form') {
+  if (evt.target.classList !== 'setup-wizard-form') {
     return;
   }
   if (nameInputElement.validity.tooShort) {

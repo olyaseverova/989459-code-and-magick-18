@@ -1,5 +1,9 @@
 'use strict';
 
+var setupDialogElement = document.querySelector('.setup');
+var SETUP_Y = 80;
+var SETUP_X = 50;
+
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 
@@ -67,11 +71,15 @@ var closePopup = function () {
 
 setupOpenElement.addEventListener('click', function () {
   openPopup();
+  setupDialogElement.style.top = SETUP_Y + 'px';
+  setupDialogElement.style.left = SETUP_X + '%';
 });
 
 setupOpenElement.addEventListener('keydown', function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openPopup();
+    setupDialogElement.style.top = SETUP_Y + 'px';
+    setupDialogElement.style.left = SETUP_X + '%';
   }
 });
 

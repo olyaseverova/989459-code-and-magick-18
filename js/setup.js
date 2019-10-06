@@ -1,6 +1,5 @@
 'use strict';
 
-var setupDialogElement = document.querySelector('.setup');
 var SETUP_Y = 80;
 var SETUP_X = 50;
 
@@ -14,6 +13,8 @@ var PERSONAGE_SURNAMES = ['да Марья', 'Верон', 'Мирабелла',
 var COAT_COLORS = ['rgb(101,137,164)', 'rgb(241,43,107)', 'rgb(146,100,161)', 'rgb(56,159,117)', 'rgb(215,210,55)', 'rgb(0,0,0)'];
 var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
+
+var setupDialogElement = document.querySelector('.setup');
 
 var similarElement = document.querySelector('.setup-similar-list');
 var wizardTemplateElement = document.querySelector('#similar-wizard-template')

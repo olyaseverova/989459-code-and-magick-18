@@ -1,12 +1,6 @@
 'use strict';
 (function () {
 
-  var SETUP_Y = 80;
-  var SETUP_X = 50;
-
-  var ESC_KEYCODE = 27;
-  var ENTER_KEYCODE = 13;
-
   var PERSONAGES_QUANTITY = 4;
 
   var PERSONAGE_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
@@ -15,7 +9,7 @@
   var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
   var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 
-  var setupDialogElement = document.querySelector('.setup');
+  var setupElement = document.querySelector('.setup');
 
   var similarElement = document.querySelector('.setup-similar-list');
   var wizardTemplateElement = document.querySelector('#similar-wizard-template')
@@ -27,89 +21,50 @@
   };
 
   var renderPersonage = function (wizard) {
-    var personageElement = wizardTemplateElement.cloneNode(true);
+    var wizardElement = wizardTemplateElement.cloneNode(true);
 
-    personageElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    personageElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-    personageElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+    wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
 
-    return personageElement;
+    return wizardElement;
   };
 
-  var fragment = document.createDocumentFragment();
-  for (var k = 0; k < PERSONAGES_QUANTITY; k++) {
-    fragment.appendChild(renderPersonage({
-      name: getRandomArrayItem(PERSONAGE_NAMES) + ' ' + getRandomArrayItem(PERSONAGE_SURNAMES),
-      coatColor: getRandomArrayItem(COAT_COLORS),
-      eyesColor: getRandomArrayItem(EYES_COLORS)
-    }));
-  }
-  similarElement.appendChild(fragment);
+  var loadHandler = function () {
+    var fragment = document.createDocumentFragment();
 
-  document.querySelector('.setup-similar').classList.remove('hidden');
-
-  var setupElement = document.querySelector('.setup');
-  var setupOpenElement = document.querySelector('.setup-open');
-  var setupCloseElement = setupElement.querySelector('.setup-close');
-
-  var onPopupEscPress = function (evt) {
-    if (evt.target.classList.contains('setup-user-name')) {
-      return;
+    for (var i = 0; i < PERSONAGES_QUANTITY; i++) {
+      fragment.appendChild(renderPersonage({
+        name: getRandomArrayItem(PERSONAGE_NAMES) + ' ' + getRandomArrayItem(PERSONAGE_SURNAMES),
+        coatColor: getRandomArrayItem(COAT_COLORS),
+        eyesColor: getRandomArrayItem(EYES_COLORS)
+      }));
     }
-    if (evt.keyCode === ESC_KEYCODE) {
-      closePopup();
-    }
+    similarElement.appendChild(fragment);
+
+    setupElement.querySelector('.setup-similar').classList.remove('hidden');
   };
 
-  var openPopup = function () {
-    setupElement.classList.remove('hidden');
-    document.addEventListener('keydown', onPopupEscPress);
+  var errorHandler = function (errorMessage) {
+    var node = document.createElement('div');
+    node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
+    node.style.position = 'absolute';
+    node.style.left = 0;
+    node.style.right = 0;
+    node.style.fontSize = '30px';
+
+    node.textContent = errorMessage;
+    document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  var closePopup = function () {
-    setupElement.classList.add('hidden');
-    document.removeEventListener('keydown', onPopupEscPress);
-  };
+  window.load(loadHandler, errorHandler);
 
-  setupOpenElement.addEventListener('click', function () {
-    openPopup();
-    setupDialogElement.style.top = SETUP_Y + 'px';
-    setupDialogElement.style.left = SETUP_X + '%';
-  });
-
-  setupOpenElement.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      openPopup();
-      setupDialogElement.style.top = SETUP_Y + 'px';
-      setupDialogElement.style.left = SETUP_X + '%';
-    }
-  });
-
-  setupCloseElement.addEventListener('click', function () {
-    closePopup();
-  });
-
-  setupCloseElement.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      closePopup();
-    }
-  });
-
-  var nameInputElement = setupElement.querySelector('.setup-user-name');
-
-  nameInputElement.addEventListener('invalid', function (evt) {
-    if (!evt.target.classList.contains('setup-wizard-form')) {
-      return;
-    }
-    if (nameInputElement.validity.tooShort) {
-      nameInputElement.setCustomValidity('Имя должно состоять минимум из 2-х символов');
-    } else if (nameInputElement.validity.tooLong) {
-      nameInputElement.setCustomValidity('Имя не должно превышать 25-ти символов');
-    } else if (nameInputElement.validity.valueMissing) {
-      nameInputElement.setCustomValidity('Обязательное поле');
-    } else {
-      nameInputElement.setCustomValidity('');
-    }
+  var form = setupElement.querySelector('.setup-wizard-form');
+  form.addEventListener('submit', function (evt) {
+    window.save(new FormData(form), function () {
+      setupElement.classList.add('hidden');
+    });
+    evt.preventDefault();
   });
 
   var setupWizardElement = document.querySelector('.setup-wizard');

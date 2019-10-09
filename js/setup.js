@@ -19,11 +19,17 @@
   };
 
   var renderPersonage = function (wizard) {
+    var currentWizard = {};
+    (function () {
+      currentWizard.name = wizard.name;
+      currentWizard.colorCoat = wizard.colorCoat;
+      currentWizard.colorEyes = wizard.colorEyes;
+    })();
     var wizardElement = wizardTemplateElement.cloneNode(true);
 
-    wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
+    wizardElement.querySelector('.setup-similar-label').textContent = currentWizard.name;
+    wizardElement.querySelector('.wizard-coat').style.fill = currentWizard.colorCoat;
+    wizardElement.querySelector('.wizard-eyes').style.fill = currentWizard.colorEyes;
 
     return wizardElement;
   };

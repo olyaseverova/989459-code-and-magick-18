@@ -1,8 +1,7 @@
 'use strict';
 
 (function () {
-
-  window.load = function (onLoad, onError) {
+  var load = function (onLoad, onError) {
     var URL = 'https://js.dump.academy/code-and-magick/data';
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -27,7 +26,7 @@
     xhr.send();
   };
 
-  window.save = function (data, onLoad) {
+  var save = function (data, onLoad) {
     var URL = 'https://js.dump.academy/code-and-magick';
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -39,4 +38,10 @@
     xhr.open('POST', URL);
     xhr.send(data);
   };
+
+  window.backend = {
+    load: load,
+    save: save
+  };
+
 })();

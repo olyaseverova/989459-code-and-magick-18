@@ -3,8 +3,6 @@
 
   var PERSONAGES_QUANTITY = 4;
 
-  var PERSONAGE_NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-  var PERSONAGE_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
   var COAT_COLORS = ['rgb(101,137,164)', 'rgb(241,43,107)', 'rgb(146,100,161)', 'rgb(56,159,117)', 'rgb(215,210,55)', 'rgb(0,0,0)'];
   var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
   var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
@@ -24,21 +22,17 @@
     var wizardElement = wizardTemplateElement.cloneNode(true);
 
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
 
     return wizardElement;
   };
 
-  var loadHandler = function () {
+  var loadHandler = function (wizards) {
     var fragment = document.createDocumentFragment();
 
     for (var i = 0; i < PERSONAGES_QUANTITY; i++) {
-      fragment.appendChild(renderPersonage({
-        name: getRandomArrayItem(PERSONAGE_NAMES) + ' ' + getRandomArrayItem(PERSONAGE_SURNAMES),
-        coatColor: getRandomArrayItem(COAT_COLORS),
-        eyesColor: getRandomArrayItem(EYES_COLORS)
-      }));
+      fragment.appendChild(renderPersonage(wizards[i]));
     }
     similarElement.appendChild(fragment);
 
@@ -57,11 +51,11 @@
     document.body.insertAdjacentElement('afterbegin', node);
   };
 
-  window.load(loadHandler, errorHandler);
+  window.backend.load(loadHandler, errorHandler);
 
   var form = setupElement.querySelector('.setup-wizard-form');
   form.addEventListener('submit', function (evt) {
-    window.save(new FormData(form), function () {
+    window.backend.save(new FormData(form), function () {
       setupElement.classList.add('hidden');
     });
     evt.preventDefault();

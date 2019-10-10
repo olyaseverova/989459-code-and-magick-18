@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var CLOUD_WIDTH = 420;
   var CLOUD_HEIGHT = 270;
   var CLOUD_X = 100;
@@ -15,6 +16,10 @@
   var RESULTS_X = 55;
   var RESULTS_NAME_Y = 265;
   var RESULTS_MAX = 150;
+
+  window.getRandomInteger = function (uBound) {
+    return Math.round(Math.random() * uBound);
+  };
 
   var renderCloud = function (ctx, x, y, color) {
     ctx.fillStyle = color;
@@ -31,10 +36,6 @@
     return max;
   };
 
-  var getRandomInteger = function (uBound) {
-    return Math.round(Math.random() * uBound);
-  };
-
   var breakScreenLine = function (ctx, text, x, y, yGap) {
     var arr = text.split('\n');
 
@@ -44,7 +45,7 @@
   };
 
   var getRandomFillstyle = function () {
-    return 'hsl(240, ' + getRandomInteger(100) + '%, 50%)';
+    return 'hsl(240, ' + window.getRandomInteger(100) + '%, 50%)';
   };
 
   window.renderStatistics = function (ctx, names, times) {

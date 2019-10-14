@@ -4,6 +4,12 @@
 
   var PERSONAGES_QUANTITY = 4;
 
+  window.setupElement = document.querySelector('.setup');
+  window.similarElement = document.querySelector('.setup-similar-list');
+  var wizardTemplateElement = document.querySelector('#similar-wizard-template')
+    .content
+    .querySelector('.setup-similar-item');
+
   var form = window.setupElement.querySelector('.setup-wizard-form');
   form.addEventListener('submit', function (evt) {
     window.backend.save(new FormData(form), function () {
@@ -21,7 +27,7 @@
       };
     };
     var currentWizard = adaptData();
-    var wizardElement = window.wizardTemplateElement.cloneNode(true);
+    var wizardElement = wizardTemplateElement.cloneNode(true);
 
     wizardElement.querySelector('.setup-similar-label').textContent = currentWizard.name;
     wizardElement.querySelector('.wizard-coat').style.fill = currentWizard.coat;
@@ -30,11 +36,12 @@
     return wizardElement;
   };
 
-  window.loadHandler = function (wizards) {
+  window.render = function (wizards) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < PERSONAGES_QUANTITY; i++) {
       fragment.appendChild(renderPersonage(wizards[i]));
     }
+    window.similarElement.innerHTML = '';
     window.similarElement.appendChild(fragment);
 
     window.setupElement.querySelector('.setup-similar').classList.remove('hidden');

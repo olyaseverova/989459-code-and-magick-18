@@ -1,4 +1,5 @@
 'use strict';
+
 (function () {
 
   var coatColor;
@@ -18,35 +19,26 @@
     return rank;
   };
 
-  var namesComparator = function (left, right) {
-    if (left > right) {
-      return 1;
-    } else if (left < right) {
-      return -1;
-    } else {
-      return 0;
-    }
-  };
-
   var updateWizards = function () {
-    window.loadHandler(wizards.sort(function (left, right) {
-      var rankDiff = getRank(right) - getRank(left);
-      if (rankDiff === 0) {
-        rankDiff = namesComparator(left.name, right.name);
-      }
-      return rankDiff;
-    }));
+    window.render(wizards.slice().
+      sort(function (left, right) {
+        var rankDiff = getRank(right) - getRank(left);
+        if (rankDiff === 0) {
+          rankDiff = wizards.indexOf(left) - wizards.indexOf(right);
+        }
+        return rankDiff;
+      }));
   };
 
-  window.wizard.onEyesChange = function (color) {
+  window.wizard.onEyesChange = window.debounce(function (color) {
     eyesColor = color;
     updateWizards();
-  };
+  });
 
-  window.wizard.onCoatChange = function (color) {
+  window.wizard.onCoatChange = window.debounce(function (color) {
     coatColor = color;
     updateWizards();
-  };
+  });
 
   var successHandler = function (data) {
     wizards = data;
